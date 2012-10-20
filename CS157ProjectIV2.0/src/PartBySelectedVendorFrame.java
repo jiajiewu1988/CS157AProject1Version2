@@ -20,7 +20,8 @@ public class PartBySelectedVendorFrame extends JFrame {
 		JButton selectButton = new JButton("Select");
 		JButton backButton = new JButton("Back");
 		
-		String[] parts = {"5.6L HEMI V8", "2.4L i-VTEC I4", "2.0 Boxer Turbo H4"};
+		String[] parts = Result.getPart(selectedVendor.toString());
+		//String[] parts = {"5.6L HEMI V8", "2.4L i-VTEC I4", "2.0 Boxer Turbo H4"};
 		final JList<String> partList = new JList<String>(parts);
 		partList.setSelectedIndex(0);
 		
