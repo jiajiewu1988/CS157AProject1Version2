@@ -49,8 +49,9 @@ public class InitialFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-//				venderFrame.setVisible(true);
-//				frame.setVisible(false);
+				PartVendorFrame vendorFrame = new PartVendorFrame(frame);
+				vendorFrame.setVisible(true);
+				frame.setVisible(false);
 			}
 		});
 		

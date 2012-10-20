@@ -113,4 +113,26 @@ public class Result implements Comparator<String>{
 		}
 		return list;
 	}
+	
+	/**
+	 * 
+	 * @param vendor
+	 * @return
+	 */
+	public static String[] getPart(String vendor) {
+		
+		ArrayList<String> pl = new ArrayList<String>();
+		
+		try {
+			DBOperation dbop = new DBOperation();
+			ResultSet rs = dbop.queryPart(vendor);
+			pl = constructList(rs);
+			Collections.sort(pl, new Result());
+			dbop.disconnectFromDB();
+		} catch (SQLException e) {
+			System.err.println("Error in Result.getEngineType: " + e.getMessage());
+		}
+		
+		return pl.toArray(new String[pl.size()]);
+	}
 }

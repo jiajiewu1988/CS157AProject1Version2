@@ -4,12 +4,13 @@ import java.sql.*;
 
 /**
  * To create a connection to oracle
- * @author jerry wu
+ * @author jerry wu, Sean Peng
  *
  */
 public class DBOperation {
 	private final String DB_DRIVER = "oracle.jdbc.driver.OracleDriver";
-	private final String DB_URL = "jdbc:oracle:thin:@localhost:1521:oracle";
+	//private final String DB_URL = "jdbc:oracle:thin:@localhost:1521:oracle";
+	private final String DB_URL = "jdbc:oracle:thin:@localhost:1521:scott";
 	private final String DB_USER = "system";
 	private final String DB_PASS = "tiger";
 	private static Connection con;
@@ -84,6 +85,20 @@ public class DBOperation {
 							+ " WHERE MODEL = '" + model + "'"
 							+ " AND YEAR = '" + year + "'";
 		ResultSet rs = stmnt.executeQuery(engine_type);
+		return rs;
+	}
+	
+	/**
+	 * 
+	 * @param vendor
+	 * @return
+	 * @throws SQLException
+	 */
+	public ResultSet queryPart(String vendor) throws SQLException {
+		
+		String part_by_vendor = "SELECT P_NUMBER FROM RDIM" + vendor;
+		ResultSet rs = stmnt.executeQuery(part_by_vendor);
+		
 		return rs;
 	}
 }
