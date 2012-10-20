@@ -9,6 +9,13 @@ import java.util.*;
  *
  */
 public class Result implements Comparator<String>{
+	
+	/**
+	 * Set a private constructor
+	 */
+	private Result() {
+		
+	}
 
 	/**
 	 * Compare 2 Strings
