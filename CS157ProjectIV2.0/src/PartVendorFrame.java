@@ -9,6 +9,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 
+/**
+ * Display available part vendors
+ * @author Sean Peng
+ *
+ */
 public class PartVendorFrame extends JFrame {
 	
 	private JFrame frame = this;

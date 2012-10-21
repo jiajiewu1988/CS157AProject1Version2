@@ -1,6 +1,7 @@
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -8,6 +9,11 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 
+/**
+ * Display selected part's specification
+ * @author Sean Peng
+ *
+ */
 public class PartSpecFrame extends JFrame{
 
 	private JFrame frame = this;
@@ -31,7 +37,8 @@ public class PartSpecFrame extends JFrame{
 		});
 		
 		String newLine = System.getProperty("line.separator");
-		descriptionArea.setText("Vendor: " + selectedVendor + newLine + "Part: " + selectedPart);
+		String[] spec = Result.getPartSpec(selectedVendor.toString(), selectedPart.toString());
+		descriptionArea.setText("Vendor: " + selectedVendor + newLine + "Specification: " + Arrays.toString(spec));
 		
 		buttonPanel.add(orderButton);
 		buttonPanel.add(backButton);

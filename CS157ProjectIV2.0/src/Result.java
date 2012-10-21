@@ -5,7 +5,7 @@ import java.util.*;
 
 /**
  * Fetch the result by query statement, return ArrayLists
- * @author jerry wu
+ * @author jerry wu, Sean Peng
  *
  */
 public class Result implements Comparator<String>{
@@ -108,6 +108,52 @@ public class Result implements Comparator<String>{
 	}
 
 	/**
+	 * Get a list of part number according to part vendor's name
+	 * @param vendor vendor's name
+	 * @return a list of part number
+	 */
+	public static String[] getPartNumber(String vendor) {
+		
+		ArrayList<String> pl = new ArrayList<String>();
+		
+		try {
+			DBOperation dbop = new DBOperation();
+			ResultSet rs = dbop.queryPartNumber(vendor);
+			pl = constructList(rs);
+			Collections.sort(pl, new Result());
+			dbop.disconnectFromDB();
+		} catch (SQLException e) {
+			System.err.println("Error in Result.getPartNumber: " + e.getMessage());
+		}
+		
+		return pl.toArray(new String[pl.size()]);
+	}
+	
+	/**
+	 * Get a list of part specification according to part vendor's name, part number
+	 * @param vendor vendor's name
+	 * @param partNumber part number
+	 * @return a list of part specification
+	 */
+	public static String[] getPartSpec(String vendor, String partNumber) {
+		
+		ArrayList<String> pl = new ArrayList<String>();
+		
+		try {
+			DBOperation dbop = new DBOperation();
+			ResultSet rs = dbop.queryPartSpec(vendor, partNumber);
+			
+			ResultSetMetaData rsmd = rs.getMetaData();
+			pl = constructList(rs, rsmd.getColumnCount());
+			dbop.disconnectFromDB();
+		} catch (SQLException e) {
+			System.err.println("Error in Result.getPartSpec: " + e.getMessage());
+		}
+		
+		return pl.toArray(new String[pl.size()]);
+	}
+	
+	/**
 	 * Construct the ArrayList with no duplicate items by the result set from oracle
 	 * @param rs contains list items fetched from oracle
 	 * @return ArrayList with no duplicate items
@@ -122,24 +168,22 @@ public class Result implements Comparator<String>{
 	}
 	
 	/**
-	 * 
-	 * @param vendor
-	 * @return
+	 * Construct the ArrayList with based on the result set and its column size from oracle
+	 * @param rs contains list items fetched from oracle
+	 * @param columnCount the size of the column in result set
+	 * @return ArrayList based on the data from result set
 	 */
-	public static String[] getPart(String vendor) {
+	private static ArrayList<String> constructList(ResultSet rs, int columnCount) throws SQLException{
 		
-		ArrayList<String> pl = new ArrayList<String>();
+		ArrayList<String> list = new ArrayList<String>();
 		
-		try {
-			DBOperation dbop = new DBOperation();
-			ResultSet rs = dbop.queryPart(vendor);
-			pl = constructList(rs);
-			Collections.sort(pl, new Result());
-			dbop.disconnectFromDB();
-		} catch (SQLException e) {
-			System.err.println("Error in Result.getEngineType: " + e.getMessage());
+		while (rs.next()) {			
+			for(int i=0; i<columnCount; i++) {			
+				list.add(rs.getString(i+1));
+			}		
 		}
 		
-		return pl.toArray(new String[pl.size()]);
+		return list;
 	}
+	
 }

@@ -89,16 +89,32 @@ public class DBOperation {
 	}
 	
 	/**
-	 * 
-	 * @param vendor
-	 * @return
+	 * Query part by vendor's name
+	 * @param vendor vendor's name
+	 * @return a part number set
 	 * @throws SQLException
 	 */
-	public ResultSet queryPart(String vendor) throws SQLException {
+	public ResultSet queryPartNumber(String vendor) throws SQLException {
 		
-		String part_by_vendor = "SELECT P_NUMBER FROM RDIM" + vendor;
-		ResultSet rs = stmnt.executeQuery(part_by_vendor);
+		String queryPartNumber = "SELECT P_NUMBER FROM RDIM" + vendor;
+		ResultSet rs = stmnt.executeQuery(queryPartNumber);
 		
 		return rs;
 	}
+	
+	/**
+	 * Query part specification by vendor's name, part number
+	 * @param vendor vendor's name
+	 * @param partNumber part number
+	 * @return a part specification set
+	 * @throws SQLException
+	 */
+	public ResultSet queryPartSpec(String vendor, String partNumber) throws SQLException {
+		
+		String queryPartSpec = "SELECT * FROM RDIM" + vendor + " WHERE P_NUMBER = '" + partNumber + "'";
+		ResultSet rs = stmnt.executeQuery(queryPartSpec);
+		
+		return rs;
+	}
+	
 }
