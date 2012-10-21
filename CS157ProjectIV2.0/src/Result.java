@@ -10,6 +10,9 @@ import java.util.*;
  */
 public class Result implements Comparator<String>{
 	
+	private static String[] columnLabel;
+	
+	
 	/**
 	 * Set a private constructor
 	 */
@@ -17,6 +20,7 @@ public class Result implements Comparator<String>{
 		
 	}
 
+	
 	/**
 	 * Compare 2 Strings
 	 * @param o1 string to compare
@@ -27,7 +31,17 @@ public class Result implements Comparator<String>{
 	public int compare(String o1, String o2) {
 		return o1.compareTo(o2);
 	}
+	
+	
+	/**
+	 * Return the list of column name from the latest queried table
+	 * @return list of column name
+	 */
+	public static String[] getColumnLableFromCurrentTable() {
+		return columnLabel;
+	}
 
+	
 	/**
 	 * Get an ArrayList of of AutoMaker
 	 * @return AutoMaker List
@@ -47,6 +61,7 @@ public class Result implements Comparator<String>{
 		return mList.toArray(new String[mList.size()]);
 	}
 
+	
 	/**
 	 * Get a list of model according to auto maker
 	 * @param maker Auto Maker
@@ -66,6 +81,7 @@ public class Result implements Comparator<String>{
 		return mList.toArray(new String[mList.size()]);
 	}
 
+	
 	/**
 	 * Get a list of year according to auto maker, model
 	 * @param maker auto maker
@@ -86,6 +102,7 @@ public class Result implements Comparator<String>{
 		return yl.toArray(new String[yl.size()]);
 	}
 
+	
 	/**
 	 * Get a list of engine type according to auto maker, model, and year
 	 * @param maker auto maker
@@ -107,6 +124,29 @@ public class Result implements Comparator<String>{
 		return et.toArray(new String[et.size()]);
 	}
 
+	
+	/**
+	 * Get a list of vendor's name
+	 * @return a list of vendor's name
+	 */
+	public static String[] getVendor() {
+		
+		ArrayList<String> vList = new ArrayList<String>();
+		
+		try {
+			DBOperation dbop = new DBOperation();
+			ResultSet rs = dbop.queryVendor();
+			vList = constructList(rs);
+			Collections.sort(vList, new Result());
+			dbop.disconnectFromDB();
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+		}
+
+		return vList.toArray(new String[vList.size()]);
+	}	
+	
+	
 	/**
 	 * Get a list of part number according to part vendor's name
 	 * @param vendor vendor's name
@@ -129,6 +169,7 @@ public class Result implements Comparator<String>{
 		return pl.toArray(new String[pl.size()]);
 	}
 	
+	
 	/**
 	 * Get a list of part specification according to part vendor's name, part number
 	 * @param vendor vendor's name
@@ -138,12 +179,18 @@ public class Result implements Comparator<String>{
 	public static String[] getPartSpec(String vendor, String partNumber) {
 		
 		ArrayList<String> pl = new ArrayList<String>();
+		ArrayList<String> colName = new ArrayList<String>();
 		
 		try {
 			DBOperation dbop = new DBOperation();
-			ResultSet rs = dbop.queryPartSpec(vendor, partNumber);
-			
+			ResultSet rs = dbop.queryPartSpec(vendor, partNumber);			
 			ResultSetMetaData rsmd = rs.getMetaData();
+			
+			for(int i=1; i<=rsmd.getColumnCount(); i++) {
+				colName.add(rsmd.getColumnLabel(i));
+			}
+			
+			columnLabel = colName.toArray(new String[colName.size()]);
 			pl = constructList(rs, rsmd.getColumnCount());
 			dbop.disconnectFromDB();
 		} catch (SQLException e) {
@@ -152,6 +199,7 @@ public class Result implements Comparator<String>{
 		
 		return pl.toArray(new String[pl.size()]);
 	}
+	
 	
 	/**
 	 * Construct the ArrayList with no duplicate items by the result set from oracle
@@ -166,6 +214,7 @@ public class Result implements Comparator<String>{
 		}
 		return list;
 	}
+	
 	
 	/**
 	 * Construct the ArrayList with based on the result set and its column size from oracle

@@ -89,6 +89,19 @@ public class DBOperation {
 	}
 	
 	/**
+	 * Query vendor's name
+	 * @return set of vendor's name
+	 * @throws SQLException
+	 */
+	public ResultSet queryVendor() throws SQLException {
+		
+		String queryMaker = "SELECT table_name FROM all_tables WHERE table_name LIKE 'RDIM___'";
+		ResultSet result = stmnt.executeQuery(queryMaker);
+		
+		return result;
+}	
+	
+	/**
 	 * Query part by vendor's name
 	 * @param vendor vendor's name
 	 * @return a part number set
@@ -96,7 +109,7 @@ public class DBOperation {
 	 */
 	public ResultSet queryPartNumber(String vendor) throws SQLException {
 		
-		String queryPartNumber = "SELECT P_NUMBER FROM RDIM" + vendor;
+		String queryPartNumber = "SELECT P_NUMBER FROM " + vendor;
 		ResultSet rs = stmnt.executeQuery(queryPartNumber);
 		
 		return rs;
@@ -111,7 +124,7 @@ public class DBOperation {
 	 */
 	public ResultSet queryPartSpec(String vendor, String partNumber) throws SQLException {
 		
-		String queryPartSpec = "SELECT * FROM RDIM" + vendor + " WHERE P_NUMBER = '" + partNumber + "'";
+		String queryPartSpec = "SELECT * FROM " + vendor + " WHERE P_NUMBER = '" + partNumber + "'";
 		ResultSet rs = stmnt.executeQuery(queryPartSpec);
 		
 		return rs;

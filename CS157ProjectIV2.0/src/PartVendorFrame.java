@@ -25,7 +25,7 @@ public class PartVendorFrame extends JFrame {
 		JButton selectButton = new JButton("Select");
 		JButton backButton = new JButton("Back");
 		
-		String[] vendors = {"ARS", "BEH", "DAN", "MOD"};
+		String[] vendors = Result.getVendor();
 		final JList<String> vendorList = new JList<String>(vendors);
 		vendorList.setSelectedIndex(0);
 		

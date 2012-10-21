@@ -2,11 +2,13 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 
 /**
@@ -20,10 +22,29 @@ public class PartSpecFrame extends JFrame{
 	
 	public PartSpecFrame(final JFrame partBySelectedVendorFrame, Object selectedVendor, Object selectedPart) {
 		
+		String[] spec = Result.getPartSpec(selectedVendor.toString(), selectedPart.toString());
+		String[] colName = Result.getColumnLableFromCurrentTable();
+		
+		Vector<String> rowOne = new Vector<String>(Arrays.asList(spec));
+		Vector<String> columnNames = new Vector<String>(Arrays.asList(colName));
+		
+	    Vector<Vector> rowData = new Vector<Vector>();
+	    rowData.addElement(rowOne);
+		
+		JTable table = new  JTable(rowData, columnNames) {
+			public boolean isCellEditable(int row, int col) {
+				return false;
+			}
+		};
+			
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		TableColumnAdjuster tca = new TableColumnAdjuster(table);
+		tca.adjustColumns();
+		JScrollPane tablePanel = new JScrollPane(table);
+		
 		JPanel buttonPanel = new JPanel();
 		JButton orderButton = new JButton("Order");
 		JButton backButton = new JButton("Back");
-		JTextArea descriptionArea = new JTextArea();
 		
 		backButton.addActionListener(new ActionListener() {
 
@@ -36,14 +57,10 @@ public class PartSpecFrame extends JFrame{
 			
 		});
 		
-		String newLine = System.getProperty("line.separator");
-		String[] spec = Result.getPartSpec(selectedVendor.toString(), selectedPart.toString());
-		descriptionArea.setText("Vendor: " + selectedVendor + newLine + "Specification: " + Arrays.toString(spec));
-		
 		buttonPanel.add(orderButton);
 		buttonPanel.add(backButton);
 		
-		this.getContentPane().add(descriptionArea, BorderLayout.CENTER);
+		this.getContentPane().add(tablePanel, BorderLayout.CENTER);
 		this.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 		this.setTitle("Part Specification");
 		this.setSize(600,400);
