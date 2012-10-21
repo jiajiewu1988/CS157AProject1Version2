@@ -1,4 +1,6 @@
-import java.awt.BorderLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -18,10 +20,17 @@ public class PartBySelectedVendorFrame extends JFrame {
 
 	private JFrame frame = this;
 	
+	/**
+	 * Constructor for PartBySelectedVendorFrame
+	 * @param partVendorFrame JFrame object from previous screen
+	 * @param selectedVendor selected vendor's name from previous screen
+	 */
 	public PartBySelectedVendorFrame(final JFrame partVendorFrame, final Object selectedVendor) {
 		
 		JPanel partPanel = new JPanel();
 		JPanel buttonPanel = new JPanel();
+		JPanel comboPanel = new JPanel();
+		
 		JButton selectButton = new JButton("Select");
 		JButton backButton = new JButton("Back");
 		
@@ -54,13 +63,17 @@ public class PartBySelectedVendorFrame extends JFrame {
 		});
 		
 		partPanel.add(new JScrollPane(partList));
-		buttonPanel.add(selectButton);
 		buttonPanel.add(backButton);
+		buttonPanel.add(selectButton);
 		
-		this.getContentPane().add(partPanel, BorderLayout.CENTER);
-		this.getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		comboPanel.setLayout(new GridLayout(2,1));
+		comboPanel.add(partPanel);
+		comboPanel.add(buttonPanel);
+		
+		this.setSize(400,400);
 		this.setTitle("Part Selection");
-		this.setSize(600,400);
+		this.setLayout(new GridBagLayout());
+		this.getContentPane().add(comboPanel, new GridBagConstraints());		
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
