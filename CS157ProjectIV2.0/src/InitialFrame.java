@@ -31,7 +31,7 @@ public class InitialFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				AutoMakerFrame autoFrame = new AutoMakerFrame();
+				AutoFrame autoFrame = new AutoFrame();
 				autoFrame.setVisible(true);
 				frame.setVisible(false);
 			}
