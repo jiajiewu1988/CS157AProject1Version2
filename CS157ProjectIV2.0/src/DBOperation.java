@@ -88,6 +88,18 @@ public class DBOperation {
 	}
 	
 	/**
+	 * Query description by maker, model, year
+	 * @return a description set
+	 */
+	public ResultSet queryDescription(String maker, String model, String year) throws SQLException {
+		String desc = "SELECT DESCRIPTION, LITRES, ENGINE_TYPE, CUBIC_INCHES, RLINK FROM " + maker 
+				+ " WHERE MODEL = '" + model + "'"
+				+ " AND YEAR = '" + year + "'";
+		ResultSet rs = stmnt.executeQuery(desc);
+		return rs;
+	}
+	
+	/**
 	 * Query vendor's name
 	 * @return set of vendor's name
 	 * @throws SQLException

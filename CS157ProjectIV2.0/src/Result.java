@@ -200,6 +200,19 @@ public class Result implements Comparator<String>{
 		return pl.toArray(new String[pl.size()]);
 	}
 	
+	/**
+	 * Sample get Description - need to modify
+	 * @param maker
+	 * @param model
+	 * @param year
+	 * @return
+	 * @throws SQLException
+	 */
+	public ResultSet getAllDesc(String maker, String model, String year) throws SQLException {
+		DBOperation dbop = new DBOperation();
+		ResultSet rs = dbop.queryDescription(maker, model, year);
+		return rs;
+	}
 	
 	/**
 	 * Construct the ArrayList with no duplicate items by the result set from oracle
@@ -214,7 +227,6 @@ public class Result implements Comparator<String>{
 		}
 		return list;
 	}
-	
 	
 	/**
 	 * Construct the ArrayList with based on the result set and its column size from oracle
