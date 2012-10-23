@@ -4,7 +4,7 @@ import java.sql.*;
 
 /**
  * To create a connection to oracle
- * @author jerry wu, Sean Peng
+ * @author jerry wu, Sean Peng, Qiwen Wu
  *
  */
 public class DBOperation {
