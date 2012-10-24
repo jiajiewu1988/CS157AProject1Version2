@@ -10,9 +10,9 @@ import java.sql.*;
 public class DBOperation {
 	private final String DB_DRIVER = "oracle.jdbc.driver.OracleDriver";
 	//private final String DB_URL = "jdbc:oracle:thin:@localhost:1521:oracle";
-	private final String DB_URL = "jdbc:oracle:thin:@localhost:1521:scott";
+	private final String DB_URL = "jdbc:oracle:thin:@localhost:1521:mops";
 	private final String DB_USER = "system";
-	private final String DB_PASS = "tiger";
+	private final String DB_PASS = "Password1";
 	private static Connection con;
 	private static Statement stmnt;
 	
@@ -93,6 +93,9 @@ public class DBOperation {
 	 * @return a description set
 	 */
 	public ResultSet queryDescription(String maker, String model, String year) throws SQLException {
+		//make the statament type to be scrollable
+		stmnt = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+		
 		String desc = "SELECT DESCRIPTION, LITRES, ENGINE_TYPE, CUBIC_INCHES, RLINK FROM " + maker 
 				+ " WHERE MODEL = '" + model + "'"
 				+ " AND YEAR = '" + year + "'";

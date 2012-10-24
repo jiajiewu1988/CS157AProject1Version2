@@ -205,13 +205,36 @@ public class Result implements Comparator<String>{
 	 * @param maker
 	 * @param model
 	 * @param year
-	 * @return
+	 * @return 2 dimensional array stores table with attributes: DESCRIPTION, LITRES, ENGINE_TYPE, CUBIC_INCHES, RLINK
 	 * @throws SQLException
 	 */
-	public ResultSet getAllDesc(String maker, String model, String year) throws SQLException {
+	public static String[][] getAllDesc(String maker, String model, String year) throws SQLException{
 		DBOperation dbop = new DBOperation();
 		ResultSet rs = dbop.queryDescription(maker, model, year);
-		return rs;
+		ResultSetMetaData rsmd = rs.getMetaData();
+		
+		int row_size = 0;
+		int col_size = rsmd.getColumnCount();
+		if (rs != null) {
+			rs.beforeFirst();
+			rs.last();
+			row_size = rs.getRow();
+			rs.beforeFirst();
+		}
+		String[][] table = new String[row_size][col_size];
+		
+		int i = 0;
+		while (rs.next()) {
+			for (int j = 0; j < col_size; j++) {
+				table[i][j] = rs.getString(j+1);
+			}
+			i++;
+		}
+		
+		dbop.disconnectFromDB();
+		
+		return table;
+
 	}
 	
 	/**
