@@ -9,10 +9,11 @@ import java.sql.*;
  */
 public class DBOperation {
 	private final String DB_DRIVER = "oracle.jdbc.driver.OracleDriver";
-	//private final String DB_URL = "jdbc:oracle:thin:@localhost:1521:oracle";
-	private final String DB_URL = "jdbc:oracle:thin:@localhost:1521:mops";
+	private final String DB_URL = "jdbc:oracle:thin:@localhost:1521:oracle";
+//	private final String DB_URL = "jdbc:oracle:thin:@localhost:1521:mops";
 	private final String DB_USER = "system";
-	private final String DB_PASS = "Password1";
+//	private final String DB_PASS = "Password1";
+	private final String DB_PASS = "tiger";
 	private static Connection con;
 	private static Statement stmnt;
 	

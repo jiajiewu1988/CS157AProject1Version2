@@ -138,7 +138,7 @@ public class AutoFrame extends JFrame {
 		JPanel autoDes = new JPanel();
 		JButton backButton = new JButton(" Back ");
 		
-		description = new JTextArea("Auto Description");
+		description = new JTextArea();
 		description.setBorder(BorderFactory.createTitledBorder("Auto Description: "));
 		description.setEditable(false);
 		description.setPreferredSize(new Dimension(600,250));
