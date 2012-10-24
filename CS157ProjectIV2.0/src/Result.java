@@ -202,9 +202,9 @@ public class Result implements Comparator<String>{
 	
 	/**
 	 * Sample get Description - need to modify
-	 * @param maker
-	 * @param model
-	 * @param year
+	 * @param maker Auto Maker
+	 * @param model Auto Model
+	 * @param year	make Year
 	 * @return 2 dimensional array stores table with attributes: DESCRIPTION, LITRES, ENGINE_TYPE, CUBIC_INCHES, RLINK
 	 * @throws SQLException
 	 */

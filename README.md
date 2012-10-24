@@ -10,8 +10,8 @@ for example, Result.getAutoMaker(); will return you the String Array of all auto
 1. **Make sure you have start your Oracle Services: *OracleOraDb11g_home1TNSListener***
 
 1.	**In DBOperation**<br />
-	private final String DB_URL = "jdbc:oracle:thin:@localhost:1521:**scott**";<br />
-	private final String DB_USER = "**system**";<br />
+	private final String DB_URL = "jdbc:oracle:thin:@localhost:1521:__scott__";<br />
+	private final String DB_USER = **"system"**;<br />
 	private final String DB_PASS = **"tiger"**;<br /><br/>
 	**Change the DB\_URL, DB\_USER, and DB\_PASS to specific value for your laptop.**
 	
@@ -40,9 +40,19 @@ for example, Result.getAutoMaker(); will return you the String Array of all auto
 		 * @param model auto model
 		 * @return a list of year
 		 */
-		<u>public static String[] getYear(String maker, String model)</u>
+		<u>public static String[] getYear(String maker, String model)</u><br />
+		/**
+		 * Sample get Description - need to modify
+		 * @param maker Auto Maker
+		 * @param model Auto Model
+		 * @param year	make Year
+		 * @return 2 dimensional array stores table with attributes: DESCRIPTION, LITRES, ENGINE_TYPE, CUBIC_INCHES, RLINK
+		 * @throws SQLException
+		 */
+		public static String[][] getAllDesc(String maker, String model, String year)
 	</code></pre>
 	<br />
+	_The SQLTester.java is currently a sample test for the getAllDesc, it shows what will be output for this query method_
 ### P.S.
 This document use markdown syntax, basically it's a simpler way to write html codes. If you want to add any thing to this page, this website can help you about the syntax of mark down: 
 [http://daringfireball.net/projects/markdown/syntax](http://daringfireball.net/projects/markdown/syntax)
