@@ -46,10 +46,10 @@ for example, Result.getAutoMaker(); will return you the String Array of all auto
 		 * @param maker Auto Maker
 		 * @param model Auto Model
 		 * @param year	make Year
-		 * @return 2 dimensional array stores table with attributes: DESCRIPTION, LITRES, ENGINE_TYPE, CUBIC_INCHES, RLINK
+		 * @return a String stores table with attributes: DESCRIPTION, LITRES, ENGINE_TYPE, CUBIC_INCHES, RLINK
 		 * @throws SQLException
 		 */
-		public static String[][] getAllDesc(String maker, String model, String year)
+		public static String getAllDesc(String maker, String model, String year)
 	</code></pre>
 	<br />
 	_The SQLTester.java is currently a sample test for the getAllDesc, it shows what will be output for this query method_
