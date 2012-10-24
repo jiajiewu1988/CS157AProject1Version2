@@ -201,7 +201,7 @@ public class Result implements Comparator<String>{
 	}
 	
 	/**
-	 * Sample get Description - need to modify
+	 * Get the Description table according to maker, model, and year
 	 * @param maker Auto Maker
 	 * @param model Auto Model
 	 * @param year	make Year
