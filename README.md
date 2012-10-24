@@ -42,7 +42,7 @@ for example, Result.getAutoMaker(); will return you the String Array of all auto
 		 */
 		<u>public static String[] getYear(String maker, String model)</u><br />
 		/**
-		 * Sample get Description - need to modify
+		 * Get the Description table according to maker, model, and year
 		 * @param maker Auto Maker
 		 * @param model Auto Model
 		 * @param year	make Year
