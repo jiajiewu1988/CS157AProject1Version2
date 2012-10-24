@@ -2,6 +2,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -10,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -26,7 +28,8 @@ public class AutoFrame extends JFrame {
 	private DefaultListModel<String> makerListModel;
 	private DefaultListModel<String> modelListModel;
 	private DefaultListModel<String> yearListModel;
-	private JTextField description;
+	private JTextArea description;
+	private String allDes; 
 	
 //	private final static int height = 20;
 //	private final static int width = 200;
@@ -118,6 +121,13 @@ public class AutoFrame extends JFrame {
 						
 						JList<String> list = (JList<String>)e.getSource();
 						year = (String) list.getSelectedValue();
+						try {
+							allDes = Result.getAllDesc(maker, model, year);
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						description.append(allDes);
 					}
 				}
 			});
@@ -128,7 +138,7 @@ public class AutoFrame extends JFrame {
 		JPanel autoDes = new JPanel();
 		JButton backButton = new JButton(" Back ");
 		
-		description = new JTextField("Auto Description");
+		description = new JTextArea("Auto Description");
 		description.setBorder(BorderFactory.createTitledBorder("Auto Description: "));
 		description.setEditable(false);
 		description.setPreferredSize(new Dimension(600,250));

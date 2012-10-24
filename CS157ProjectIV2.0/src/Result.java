@@ -208,7 +208,7 @@ public class Result implements Comparator<String>{
 	 * @return 2 dimensional array stores table with attributes: DESCRIPTION, LITRES, ENGINE_TYPE, CUBIC_INCHES, RLINK
 	 * @throws SQLException
 	 */
-	public static String[][] getAllDesc(String maker, String model, String year) throws SQLException{
+	public static String getAllDesc(String maker, String model, String year) throws SQLException{
 		DBOperation dbop = new DBOperation();
 		ResultSet rs = dbop.queryDescription(maker, model, year);
 		ResultSetMetaData rsmd = rs.getMetaData();
@@ -223,17 +223,25 @@ public class Result implements Comparator<String>{
 		}
 		String[][] table = new String[row_size][col_size];
 		
-		int i = 0;
+		int index = 0;
 		while (rs.next()) {
 			for (int j = 0; j < col_size; j++) {
-				table[i][j] = rs.getString(j+1);
+				table[index][j] = rs.getString(j+1);
 			}
-			i++;
+			index++;
 		}
 		
+		String result = "";
+		for (int i = 0; i < row_size; i++ ){
+			for(int j = 0; j < col_size; j++){
+				result = result + table[i][j] + " ";
+			}
+			result = result + "\n";
+		}
+				
 		dbop.disconnectFromDB();
 		
-		return table;
+		return result;
 
 	}
 	
