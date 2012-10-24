@@ -10,7 +10,7 @@ for example, Result.getAutoMaker(); will return you the String Array of all auto
 1. **Make sure you have start your Oracle Services: *OracleOraDb11g_home1TNSListener***
 
 1.	**In DBOperation**<br />
-	private final String DB_URL = "jdbc:oracle:thin:@localhost:1521:__scott__";<br />
+	private final String DB_URL = "jdbc:oracle:thin:@localhost:1521:<b>scott</b>";<br />
 	private final String DB_USER = **"system"**;<br />
 	private final String DB_PASS = **"tiger"**;<br /><br/>
 	**Change the DB\_URL, DB\_USER, and DB\_PASS to specific value for your laptop.**
