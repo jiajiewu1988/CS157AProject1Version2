@@ -75,6 +75,7 @@ public class PartBySelectedVendorFrame extends JFrame {
 		this.setLayout(new GridBagLayout());
 		this.getContentPane().add(comboPanel, new GridBagConstraints());		
 		this.setLocationRelativeTo(null);
+		this.setVisible(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 	}

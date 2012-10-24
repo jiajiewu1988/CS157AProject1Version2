@@ -9,7 +9,8 @@ import java.sql.*;
  */
 public class DBOperation {
 	private final String DB_DRIVER = "oracle.jdbc.driver.OracleDriver";
-	private final String DB_URL = "jdbc:oracle:thin:@localhost:1521:oracle";
+	//private final String DB_URL = "jdbc:oracle:thin:@localhost:1521:oracle";
+	private final String DB_URL = "jdbc:oracle:thin:@localhost:1521:scott";
 	private final String DB_USER = "system";
 	private final String DB_PASS = "tiger";
 	private static Connection con;
@@ -106,8 +107,8 @@ public class DBOperation {
 	 */
 	public ResultSet queryVendor() throws SQLException {
 		
-		String queryMaker = "SELECT table_name FROM all_tables WHERE table_name LIKE 'RDIM___'";
-		ResultSet result = stmnt.executeQuery(queryMaker);
+		String queryVendor = "SELECT table_name FROM all_tables WHERE table_name LIKE 'RDIM___'";
+		ResultSet result = stmnt.executeQuery(queryVendor);
 		
 		return result;
 }	

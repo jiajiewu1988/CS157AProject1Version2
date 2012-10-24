@@ -29,7 +29,7 @@ public class PartSpecFrame extends JFrame{
 	public PartSpecFrame(final JFrame partBySelectedVendorFrame, Object selectedVendor, Object selectedPart) {
 		
 		String[] spec = Result.getPartSpec(selectedVendor.toString(), selectedPart.toString());
-		String[] colName = Result.getColumnLableFromCurrentTable();
+		String[] colName = Result.getColumnLableFromLatestQueriedTable();
 		
 		Vector<String> rowOne = new Vector<String>(Arrays.asList(spec));
 		Vector<String> columnNames = new Vector<String>(Arrays.asList(colName));		
@@ -73,6 +73,7 @@ public class PartSpecFrame extends JFrame{
 		this.getContentPane().add(tablePanel, BorderLayout.CENTER);
 		this.getContentPane().add(buttonPanel, BorderLayout.SOUTH);	
 		this.setLocationRelativeTo(null);
+		this.setVisible(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	

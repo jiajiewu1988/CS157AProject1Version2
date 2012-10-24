@@ -37,7 +37,7 @@ public class Result implements Comparator<String>{
 	 * Return the list of column name from the latest queried table
 	 * @return list of column name
 	 */
-	public static String[] getColumnLableFromCurrentTable() {
+	public static String[] getColumnLableFromLatestQueriedTable() {
 		return columnLabel;
 	}
 
