@@ -1,23 +1,16 @@
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
-import java.util.Vector;
-
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -29,6 +22,7 @@ import javax.swing.event.ListSelectionListener;
 public class VendorFrame extends JFrame{
 	
 	private JFrame frame = this;
+	private JLabel description;
 	
 	private DefaultListModel<String> vendorListModel;
 	private DefaultListModel<String> partListModel;
@@ -49,8 +43,9 @@ public class VendorFrame extends JFrame{
 		JList<String> partList = new JList<String>(partListModel);
 		
 		JPanel partSelection = new JPanel();
-		JPanel description = new JPanel();
 		JPanel buttonPanel = new JPanel();
+		
+		description = new JLabel();
 		
 		JButton backButton = new JButton("Back");
 		JButton orderButton = new JButton("Order");
@@ -80,6 +75,7 @@ public class VendorFrame extends JFrame{
 				//only fire up when mouse up
 				if(!e.getValueIsAdjusting()) {
 					
+					@SuppressWarnings("unchecked")
 					JList<String> list = (JList<String>)e.getSource();
 					vendor = list.getSelectedValue();
 					partListModel.clear();
@@ -99,15 +95,30 @@ public class VendorFrame extends JFrame{
 			public void valueChanged(ListSelectionEvent e) {
 				
 				//only fire up when mouse up
-				if(!e.getValueIsAdjusting()) {
+				if(!e.getValueIsAdjusting() && ((JList<String>)e.getSource()).getModel().getSize() != 0) {
 					
+					@SuppressWarnings("unchecked")
 					JList<String> list = (JList<String>)e.getSource();
 					part = list.getSelectedValue();
 					
 					String[] spec = Result.getPartSpec(vendor, part);
 					String[] colName = Result.getColumnLableFromLatestQueriedTable();
 					
-					JTable table = makeDisplayTable(spec, colName);
+					StringBuilder sb = new StringBuilder();
+					sb.append("<html>");
+					sb.append("<table>");
+					
+					for(int i=0; i<colName.length; i++) {
+						
+						sb.append("<tr>");
+						sb.append("<td>" + colName[i] + ": </td><td>" + spec[i] + "</td>");
+						sb.append("</tr>");
+					}
+					
+					sb.append("</table>");
+					sb.append("</html>");
+								
+					description.setText(sb.toString());
 				}
 			}
 			
@@ -115,14 +126,16 @@ public class VendorFrame extends JFrame{
 		
 		JScrollPane vendorScroll = new JScrollPane(vendorList);
 		JScrollPane partScroll = new JScrollPane(partList);
+		JScrollPane specScroll = new JScrollPane(description);
 		
 		vendorScroll.setPreferredSize(new Dimension(100, 115));
 		partScroll.setPreferredSize(new Dimension(100, 115));
+		specScroll.setPreferredSize(new Dimension(500, 115));
+		
+		specScroll.setBorder(BorderFactory.createTitledBorder("Part Description: "));
 		
 		partSelection.add(vendorScroll, BorderLayout.WEST);
 		partSelection.add(partScroll, BorderLayout.EAST);
-		
-		description.setBorder(BorderFactory.createTitledBorder("Part Description: "));
 		
 		buttonPanel.add(backButton);
 		buttonPanel.add(orderButton);
@@ -132,40 +145,11 @@ public class VendorFrame extends JFrame{
 		this.setTitle("Part Selection");
 		this.setLayout(new GridLayout(3,1));
 		this.add(partSelection);
-		this.add(description);
+		this.add(specScroll);
 		this.add(buttonPanel);
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	}
-	
-	
-	/**
-	 * Construct a table displaying sql data
-	 * @param data data being display
-	 * @param heading the heading for the data
-	 * @return JTable
-	 */
-	private JTable makeDisplayTable(String[] data, String[] heading) {
-		
-		Vector<String> rowOne = new Vector<String>(Arrays.asList(data));
-		Vector<String> columnNames = new Vector<String>(Arrays.asList(heading));		
-	    Vector<Vector> rowData = new Vector<Vector>();
-	    
-	    rowData.addElement(rowOne);
-		
-		JTable table = new  JTable(rowData, columnNames) {
-			public boolean isCellEditable(int row, int col) {
-				return false;
-			}
-		};
-			
-		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		
-		TableColumnAdjuster tca = new TableColumnAdjuster(table);
-		tca.adjustColumns();
-		
-		return table;
 	}
 	
 }
