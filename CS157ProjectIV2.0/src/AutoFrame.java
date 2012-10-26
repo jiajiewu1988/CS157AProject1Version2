@@ -16,6 +16,15 @@ import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+/**
+ * This class includes Graphic Design for first selection
+ * (Choose from Auto Maker) of initial screen. The auto
+ * selection window include three Jlist and 1 JTextArea 
+ * to show all available auto maker, model, year and 
+ * description.
+ * @author Yongxiang
+ *
+ */
 public class AutoFrame extends JFrame {
 	
 	private AutoFrame autoFrame = this;
@@ -30,9 +39,6 @@ public class AutoFrame extends JFrame {
 	private DefaultListModel<String> yearListModel;
 	private JTextArea description;
 	private String allDes; 
-	
-//	private final static int height = 20;
-//	private final static int width = 200;
 	
 	public AutoFrame(){
 		
@@ -51,21 +57,19 @@ public class AutoFrame extends JFrame {
 		makerList = new JList<String>(makerListModel);
 		makerList.setVisibleRowCount(5);
 		makerList.setAutoscrolls(true); 
-//		makerList.setFixedCellHeight(height);
-//		makerList.setFixedCellWidth(width);
-			makerList.addListSelectionListener(new ListSelectionListener(){
+		makerList.addListSelectionListener(new ListSelectionListener(){
 
-				@Override
-				public void valueChanged(ListSelectionEvent e) {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
 					
-					//getValueIsAdjusting becomes false
-					if(!e.getValueIsAdjusting()){
+				//getValueIsAdjusting becomes false
+				if(!e.getValueIsAdjusting()){
 						
-						JList<String> list = (JList<String>)e.getSource();
-						maker = (String) list.getSelectedValue();
-						modelListModel.clear();
-						String[] models = Result.getModel(maker);
-						for( String model : models)
+					JList<String> list = (JList<String>)e.getSource();
+					maker = (String) list.getSelectedValue();
+					modelListModel.clear();
+					String[] models = Result.getModel(maker);
+					for( String model : models)
 							modelListModel.addElement(model);
 					}
 				}
@@ -77,13 +81,11 @@ public class AutoFrame extends JFrame {
 
 		
 		/*Create model list and Set up model list's property*/
-			modelListModel = new DefaultListModel<String>();
-			modelListModel.addElement("");
-			modelList = new JList<String>(modelListModel);
-			modelList.setVisibleRowCount(5);
-//			modelList.setFixedCellHeight(height);
-//			modelList.setFixedCellWidth(width);
-			modelList.addListSelectionListener(new ListSelectionListener(){
+		modelListModel = new DefaultListModel<String>();
+		modelListModel.addElement("");
+		modelList = new JList<String>(modelListModel);
+		modelList.setVisibleRowCount(5);
+		modelList.addListSelectionListener(new ListSelectionListener(){
 
 				@Override
 				public void valueChanged(ListSelectionEvent e) {
@@ -105,13 +107,11 @@ public class AutoFrame extends JFrame {
 			modelScroll.setPreferredSize(new Dimension(200,300));
 		
 		/*Create year list and Set up year list's property*/
-			yearListModel = new DefaultListModel<String>();
-			yearListModel.addElement("");
-			yearList = new JList<String>(yearListModel);
-			yearList.setVisibleRowCount(5);
-//			yearList.setFixedCellHeight(height);
-//			yearList.setFixedCellWidth(width);
-			yearList.addListSelectionListener(new ListSelectionListener(){
+		yearListModel = new DefaultListModel<String>();
+		yearListModel.addElement("");
+		yearList = new JList<String>(yearListModel);
+		yearList.setVisibleRowCount(5);
+		yearList.addListSelectionListener(new ListSelectionListener(){
 
 				@Override
 				public void valueChanged(ListSelectionEvent e) {
@@ -131,10 +131,11 @@ public class AutoFrame extends JFrame {
 					}
 				}
 			});
-			yearList.setBorder(BorderFactory.createTitledBorder("Year:"));
-			JScrollPane yearScroll = new JScrollPane(yearList);
-			yearScroll.setPreferredSize(new Dimension(200,300));
+		yearList.setBorder(BorderFactory.createTitledBorder("Year:"));
+		JScrollPane yearScroll = new JScrollPane(yearList);
+		yearScroll.setPreferredSize(new Dimension(200,300));
 		
+		/* Create TextArea for description */
 		JPanel autoDes = new JPanel();
 		JButton backButton = new JButton(" Back ");
 		
@@ -143,6 +144,7 @@ public class AutoFrame extends JFrame {
 		description.setEditable(false);
 		description.setPreferredSize(new Dimension(600,250));
 		
+		/* back button function */
 		backButton.addActionListener(new ActionListener(){
 
 			@Override
