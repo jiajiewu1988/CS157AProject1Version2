@@ -38,7 +38,8 @@ public class AutoFrame extends JFrame {
 	private DefaultListModel<String> modelListModel;
 	private DefaultListModel<String> yearListModel;
 	private JTextArea description;
-	private String allDes; 
+	private String allDes = ""; 
+	private int desLength;
 	
 	public AutoFrame(){
 		
@@ -119,6 +120,11 @@ public class AutoFrame extends JFrame {
 					//getValueIsAdjusting becomes false
 					if(!e.getValueIsAdjusting()){
 						
+						/*remove previous text in TextArea*/
+						desLength = allDes.length();
+						description.replaceRange("", 0, desLength);
+						
+						/*Append text to textArea */
 						JList<String> list = (JList<String>)e.getSource();
 						year = (String) list.getSelectedValue();
 						try {
