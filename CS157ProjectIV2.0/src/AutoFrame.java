@@ -31,12 +31,16 @@ public class AutoFrame extends JFrame {
 	private String maker;
 	private String model;
 	private String year;
+	private String engineType;
+	private String rLink;
 	private JList<String> makerList;
 	private JList<String> modelList;
 	private JList<String> yearList;
+	private JList<String> desList; 
 	private DefaultListModel<String> makerListModel;
 	private DefaultListModel<String> modelListModel;
 	private DefaultListModel<String> yearListModel;
+	private DefaultListModel<String> desListModel;
 	private JTextArea description;
 	private String allDes = ""; 
 	private int desLength;
@@ -120,9 +124,9 @@ public class AutoFrame extends JFrame {
 					//getValueIsAdjusting becomes false
 					if(!e.getValueIsAdjusting()){
 						
-						/*remove previous text in TextArea*/
-						desLength = allDes.length();
-						description.replaceRange("", 0, desLength);
+//						/*remove previous text in TextArea*/
+//						desLength = allDes.length();
+//						description.replaceRange("", 0, desLength);
 						
 						/*Append text to textArea */
 						JList<String> list = (JList<String>)e.getSource();
@@ -133,7 +137,10 @@ public class AutoFrame extends JFrame {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
-						description.append(allDes);
+						String[] allDesArr = allDes.split(";");
+						for(String des: allDesArr)
+							desListModel.addElement(des);
+//						description.append(allDes);
 					}
 				}
 			});
@@ -141,14 +148,52 @@ public class AutoFrame extends JFrame {
 		JScrollPane yearScroll = new JScrollPane(yearList);
 		yearScroll.setPreferredSize(new Dimension(200,300));
 		
+		
+		/*Create decription list and set up description list's property*/
+		desListModel = new DefaultListModel<String>();
+		desListModel.addElement("");
+		desList = new JList<String>(desListModel);
+		desList.setVisibleRowCount(5);
+		desList.addListSelectionListener(new ListSelectionListener(){
+
+				@Override
+				public void valueChanged(ListSelectionEvent e) {
+					
+					//getValueIsAdjusting becomes false
+					if(!e.getValueIsAdjusting()){
+						
+						/*Append text to textArea */
+						JList<String> list = (JList<String>)e.getSource();
+						engineType = (String) list.getSelectedValue();
+						try {
+							engineType = Result.getAllDesc(maker, model, year);
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						
+						String[] tempStrArr = engineType.split(" ");
+						rLink = tempStrArr[tempStrArr.length-2];
+						System.out.println("rLink =" + rLink);
+						
+						AutoDescriptionFrame desFrame = new AutoDescriptionFrame(rLink);
+						desFrame.setVisible(true);
+						autoFrame.setVisible(false);
+					}
+				}
+			});
+		desList.setBorder(BorderFactory.createTitledBorder("Description:"));
+		JScrollPane desScroll = new JScrollPane(desList);
+		desScroll.setPreferredSize(new Dimension(400,250));
+		
 		/* Create TextArea for description */
 		JPanel autoDes = new JPanel();
 		JButton backButton = new JButton(" Back ");
 		
-		description = new JTextArea();
-		description.setBorder(BorderFactory.createTitledBorder("Auto Description: "));
-		description.setEditable(false);
-		description.setPreferredSize(new Dimension(600,250));
+//		description = new JTextArea();
+//		description.setBorder(BorderFactory.createTitledBorder("Auto Description: "));
+//		description.setEditable(false);
+//		description.setPreferredSize(new Dimension(600,250));
 		
 		/* back button function */
 		backButton.addActionListener(new ActionListener(){
@@ -163,7 +208,7 @@ public class AutoFrame extends JFrame {
 			
 		});
 
-		autoDes.add(description);	
+		autoDes.add(desScroll);	
 		autoDes.add(backButton);
 		
 		
@@ -177,8 +222,6 @@ public class AutoFrame extends JFrame {
 		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		
-
 	}
 	
 }
