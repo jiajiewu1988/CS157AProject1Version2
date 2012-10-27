@@ -124,6 +124,49 @@ public class Result implements Comparator<String>{
 		return et.toArray(new String[et.size()]);
 	}
 
+	/**
+	 * Get the Description table according to maker, model, and year
+	 * @param maker Auto Maker
+	 * @param model Auto Model
+	 * @param year	make Year
+	 * @return 2 dimensional array stores table with attributes: DESCRIPTION, LITRES, ENGINE_TYPE, CUBIC_INCHES, RLINK
+	 * @throws SQLException
+	 */
+	public static String getAllDesc(String maker, String model, String year) throws SQLException{
+		DBOperation dbop = new DBOperation();
+		ResultSet rs = dbop.queryDescription(maker, model, year);
+		ResultSetMetaData rsmd = rs.getMetaData();
+		
+		int row_size = 0;
+		int col_size = rsmd.getColumnCount();
+		if (rs != null) {
+			rs.beforeFirst();
+			rs.last();
+			row_size = rs.getRow();
+			rs.beforeFirst();
+		}
+		String[][] table = new String[row_size][col_size];
+		
+		int index = 0;
+		while (rs.next()) {
+			for (int j = 0; j < col_size; j++) {
+				table[index][j] = rs.getString(j+1);
+			}
+			index++;
+		}
+		
+		String result = "";
+		for (int i = 0; i < row_size; i++ ){
+			for(int j = 0; j < col_size; j++){
+				result = result + table[i][j] + " ";
+			}
+			result = result + "\n";
+		}
+				
+		dbop.disconnectFromDB();
+		
+		return result;
+	}
 	
 	/**
 	 * Get a list of vendor's name
@@ -201,49 +244,34 @@ public class Result implements Comparator<String>{
 	}
 	
 	/**
-	 * Get the Description table according to maker, model, and year
-	 * @param maker Auto Maker
-	 * @param model Auto Model
-	 * @param year	make Year
-	 * @return 2 dimensional array stores table with attributes: DESCRIPTION, LITRES, ENGINE_TYPE, CUBIC_INCHES, RLINK
-	 * @throws SQLException
+	 * Get a list of part vendor based on rLink
+	 * @param rLink a key to separate the different car part
+	 * @return a list of vendor name
 	 */
-	public static String getAllDesc(String maker, String model, String year) throws SQLException{
-		DBOperation dbop = new DBOperation();
-		ResultSet rs = dbop.queryDescription(maker, model, year);
-		ResultSetMetaData rsmd = rs.getMetaData();
+	public static String[] getPartNumberByRlink(Integer rLink) {
 		
-		int row_size = 0;
-		int col_size = rsmd.getColumnCount();
-		if (rs != null) {
-			rs.beforeFirst();
-			rs.last();
-			row_size = rs.getRow();
-			rs.beforeFirst();
-		}
-		String[][] table = new String[row_size][col_size];
+		ArrayList<String> vl = new ArrayList<String>();
+		ArrayList<String> colName = new ArrayList<String>();
 		
-		int index = 0;
-		while (rs.next()) {
-			for (int j = 0; j < col_size; j++) {
-				table[index][j] = rs.getString(j+1);
+		try {
+			DBOperation dbop = new DBOperation();
+			ResultSet rs = dbop.queryPartNumberByRlink(rLink);
+			ResultSetMetaData rsmd = rs.getMetaData();
+			
+			for(int i=1; i<=rsmd.getColumnCount(); i++) {
+				colName.add(rsmd.getColumnLabel(i));
 			}
-			index++;
+			
+			columnLabel = colName.toArray(new String[colName.size()]);
+			vl = constructList(rs, rsmd.getColumnCount());
+			dbop.disconnectFromDB();
+		} catch(SQLException e) {
+			System.err.println("Error in Result.getPartSpec: " + e.getMessage());
 		}
 		
-		String result = "";
-		for (int i = 0; i < row_size; i++ ){
-			for(int j = 0; j < col_size; j++){
-				result = result + table[i][j] + " ";
-			}
-			result = result + "\n";
-		}
-				
-		dbop.disconnectFromDB();
-		
-		return result;
-
+		return vl.toArray(new String[vl.size()]);
 	}
+	
 	
 	/**
 	 * Construct the ArrayList with no duplicate items by the result set from oracle
@@ -260,7 +288,7 @@ public class Result implements Comparator<String>{
 	}
 	
 	/**
-	 * Construct the ArrayList with based on the result set and its column size from oracle
+	 * Construct the ArrayList based on the returned result set and its column size from database
 	 * @param rs contains list items fetched from oracle
 	 * @param columnCount the size of the column in result set
 	 * @return ArrayList based on the data from result set
