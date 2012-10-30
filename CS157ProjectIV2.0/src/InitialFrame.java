@@ -1,36 +1,29 @@
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.*;
 
 import javax.swing.*;
 
+/**
+ * Display initial screen for the program
+ * @author YongXiang Tang, Sean Peng
+ *
+ */
 public class InitialFrame extends JFrame {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private JFrame frame = this; 
 	
+	/**
+	 * Constructor for InitialFrame
+	 */
 	public InitialFrame() {
 		
-		/*set title*/
-		setTitle("Auto Selection");
-		setSize(400,300);
-		
-		JPanel panel = new JPanel();
-		/*create button for auto maker selection*/
+		JPanel buttonPanel = new JPanel();
 		JButton makerButton = new JButton ("1.Choose from auto maker");
-		panel.add(makerButton);
-		/*create button for vender part selection*/
 		JButton partButton = new JButton ("2.Choose from vender part");
-		panel.add(partButton);
-		
-		/*set panel layout */
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		panel.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
-		this.getContentPane().add(panel);	
-
-//		final VenderPartFrame venderFrame = new VenderPartFrame(); 
 		
 		/* buttons click actions*/
 		makerButton.addActionListener(new ActionListener(){
@@ -45,15 +38,29 @@ public class InitialFrame extends JFrame {
 			
 		});
 		
+		/* button click actions */
 		partButton.addActionListener(new ActionListener(){
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				PartVendorFrame vendorFrame = new PartVendorFrame(frame);
-				vendorFrame.setVisible(true);
+				//PartVendorFrame vendorFrame = new PartVendorFrame(frame);
+				VendorFrame vendorFrame = new VendorFrame(frame);
 				frame.setVisible(false);
 			}
 		});
 		
+		/* set panel layout */
+		buttonPanel.setLayout(new GridLayout(2,1));
+		buttonPanel.add(makerButton);
+		buttonPanel.add(partButton);
+		this.setLayout(new GridBagLayout());
+		this.getContentPane().add(buttonPanel, new GridBagConstraints());
+		
+		/* set window's properties */
+		this.setTitle("Auto Selection");
+		this.setSize(400,400);
+		this.setLocationRelativeTo(null);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	
 	}// end of InitialFrame Constructor
+	
 } // class InitialFrame

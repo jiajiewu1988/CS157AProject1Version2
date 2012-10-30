@@ -4,14 +4,16 @@ import java.sql.*;
 
 /**
  * To create a connection to oracle
- * @author jerry wu, Sean Peng
+ * @author jerry wu, Sean Peng, Qiwen Wu
  *
  */
 public class DBOperation {
 	private final String DB_DRIVER = "oracle.jdbc.driver.OracleDriver";
-	//private final String DB_URL = "jdbc:oracle:thin:@localhost:1521:oracle";
+//	private final String DB_URL = "jdbc:oracle:thin:@localhost:1521:oracle";
+//	private final String DB_URL = "jdbc:oracle:thin:@localhost:1521:mops";
 	private final String DB_URL = "jdbc:oracle:thin:@localhost:1521:scott";
 	private final String DB_USER = "system";
+//	private final String DB_PASS = "Password1";
 	private final String DB_PASS = "tiger";
 	private static Connection con;
 	private static Statement stmnt;
@@ -89,16 +91,74 @@ public class DBOperation {
 	}
 	
 	/**
-	 * 
-	 * @param vendor
-	 * @return
+	 * Query description by maker, model, year
+	 * @return a description set
+	 */
+	public ResultSet queryDescription(String maker, String model, String year) throws SQLException {
+		//make the statament type to be scrollable
+		stmnt = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+		
+		String desc = "SELECT DESCRIPTION, LITRES, ENGINE_TYPE, CUBIC_INCHES, RLINK FROM " + maker 
+				+ " WHERE MODEL = '" + model + "'"
+				+ " AND YEAR = '" + year + "'";
+		ResultSet rs = stmnt.executeQuery(desc);
+		return rs;
+	}
+	
+	/**
+	 * Query vendor's name
+	 * @return set of vendor's name
 	 * @throws SQLException
 	 */
-	public ResultSet queryPart(String vendor) throws SQLException {
+	public ResultSet queryVendor() throws SQLException {
 		
-		String part_by_vendor = "SELECT P_NUMBER FROM RDIM" + vendor;
-		ResultSet rs = stmnt.executeQuery(part_by_vendor);
+		String queryVendor = "SELECT table_name FROM all_tables WHERE table_name LIKE 'RDIM___'";
+		ResultSet result = stmnt.executeQuery(queryVendor);
+		
+		return result;
+	}
+	
+	/**
+	 * Query part by vendor's name
+	 * @param vendor vendor's name
+	 * @return a part number set
+	 * @throws SQLException
+	 */
+	public ResultSet queryPartNumber(String vendor) throws SQLException {
+		
+		String queryPartNumber = "SELECT P_NUMBER FROM " + vendor;
+		ResultSet rs = stmnt.executeQuery(queryPartNumber);
 		
 		return rs;
 	}
+	
+	/**
+	 * Query part specification by vendor's name, part number
+	 * @param vendor vendor's name
+	 * @param partNumber part number
+	 * @return a part specification set
+	 * @throws SQLException
+	 */
+	public ResultSet queryPartSpec(String vendor, String partNumber) throws SQLException {
+		
+		String queryPartSpec = "SELECT * FROM " + vendor + " WHERE P_NUMBER = '" + partNumber + "'";
+		ResultSet rs = stmnt.executeQuery(queryPartSpec);
+		
+		return rs;
+	}
+	
+	/**
+	 * Query part specification by RLINK
+	 * @param rLink key to separate different part
+	 * @return a part specification set
+	 * @throws SQLException
+	 */
+	public ResultSet queryPartNumberByRlink(Integer rLink) throws SQLException {
+		
+		String queryPartSpec = "SELECT * FROM RADCRX WHERE RLINK = '" + rLink + "'";
+		ResultSet rs = stmnt.executeQuery(queryPartSpec);
+		
+		return rs;
+	}
+	
 }

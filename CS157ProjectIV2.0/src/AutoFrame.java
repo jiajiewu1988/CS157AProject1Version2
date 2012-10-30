@@ -1,35 +1,57 @@
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+/**
+ * This class includes Graphic Design for first selection
+ * (Choose from Auto Maker) of initial screen. The auto
+ * selection window include three Jlist and 1 JTextArea 
+ * to show all available auto maker, model, year and 
+ * description.
+ * @author Yongxiang
+ *
+ */
 public class AutoFrame extends JFrame {
 	
+	private AutoFrame autoFrame = this;
 	private String maker;
 	private String model;
 	private String year;
+	private String engineType;
+	private String rLink;
 	private JList<String> makerList;
 	private JList<String> modelList;
 	private JList<String> yearList;
-	DefaultListModel<String> makerListModel;
-	DefaultListModel<String> modelListModel;
-	DefaultListModel<String> yearListModel;
-	
-	private final static int height = 20;
-	private final static int width = 200;
+	private JList<String> desList; 
+	private DefaultListModel<String> makerListModel;
+	private DefaultListModel<String> modelListModel;
+	private DefaultListModel<String> yearListModel;
+	private DefaultListModel<String> desListModel;
+	private JTextArea description;
+	private String allDes = ""; 
+	private int desLength;
 	
 	public AutoFrame(){
 		
 		/*set Title and Size*/
 		this.setTitle("Auto Selection");
 		this.setSize(800,600);
-		
-		JPanel autoPanel = new JPanel();
+	
+		JPanel autoSelection = new JPanel();
 		
 		/*Create maker list and Set up maker list's property*/
 		String[] makers = Result.getAutoMaker();
@@ -40,35 +62,35 @@ public class AutoFrame extends JFrame {
 		makerList = new JList<String>(makerListModel);
 		makerList.setVisibleRowCount(5);
 		makerList.setAutoscrolls(true); 
-		makerList.setFixedCellHeight(height);
-		makerList.setFixedCellWidth(width);
-			makerList.addListSelectionListener(new ListSelectionListener(){
+		makerList.addListSelectionListener(new ListSelectionListener(){
 
-				@Override
-				public void valueChanged(ListSelectionEvent e) {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
 					
-					//getValueIsAdjusting becomes false
-					if(!e.getValueIsAdjusting()){
+				//getValueIsAdjusting becomes false
+				if(!e.getValueIsAdjusting()){
 						
-						JList<String> list = (JList<String>)e.getSource();
-						maker = (String) list.getSelectedValue();
-						modelListModel.clear();
-						String[] models = Result.getModel(maker);
-						for( String model : models)
+					JList<String> list = (JList<String>)e.getSource();
+					maker = (String) list.getSelectedValue();
+					modelListModel.clear();
+					String[] models = Result.getModel(maker);
+					for( String model : models)
 							modelListModel.addElement(model);
 					}
 				}
 			});
 			makerList.setBorder(BorderFactory.createTitledBorder("Maker:"));
+			makerList.setSize(200, 300);
+			JScrollPane makerScroll = new JScrollPane(makerList);
+			makerScroll.setPreferredSize(new Dimension(200,300));
+
 		
 		/*Create model list and Set up model list's property*/
-			modelListModel = new DefaultListModel<String>();
-			modelListModel.addElement("");
-			modelList = new JList<String>(modelListModel);
-			modelList.setVisibleRowCount(5);
-			modelList.setFixedCellHeight(height);
-			modelList.setFixedCellWidth(width);
-			modelList.addListSelectionListener(new ListSelectionListener(){
+		modelListModel = new DefaultListModel<String>();
+		modelListModel.addElement("");
+		modelList = new JList<String>(modelListModel);
+		modelList.setVisibleRowCount(5);
+		modelList.addListSelectionListener(new ListSelectionListener(){
 
 				@Override
 				public void valueChanged(ListSelectionEvent e) {
@@ -86,15 +108,15 @@ public class AutoFrame extends JFrame {
 				}
 			});
 			modelList.setBorder(BorderFactory.createTitledBorder("Model:"));
+			JScrollPane modelScroll = new JScrollPane(modelList);
+			modelScroll.setPreferredSize(new Dimension(200,300));
 		
 		/*Create year list and Set up year list's property*/
-			yearListModel = new DefaultListModel<String>();
-			yearListModel.addElement("");
-			yearList = new JList<String>(yearListModel);
-			yearList.setVisibleRowCount(5);
-			yearList.setFixedCellHeight(height);
-			yearList.setFixedCellWidth(width);
-			yearList.addListSelectionListener(new ListSelectionListener(){
+		yearListModel = new DefaultListModel<String>();
+		yearListModel.addElement("");
+		yearList = new JList<String>(yearListModel);
+		yearList.setVisibleRowCount(5);
+		yearList.addListSelectionListener(new ListSelectionListener(){
 
 				@Override
 				public void valueChanged(ListSelectionEvent e) {
@@ -102,21 +124,104 @@ public class AutoFrame extends JFrame {
 					//getValueIsAdjusting becomes false
 					if(!e.getValueIsAdjusting()){
 						
+//						/*remove previous text in TextArea*/
+//						desLength = allDes.length();
+//						description.replaceRange("", 0, desLength);
+						
+						/*Append text to textArea */
 						JList<String> list = (JList<String>)e.getSource();
 						year = (String) list.getSelectedValue();
+						try {
+							allDes = Result.getAllDesc(maker, model, year);
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						String[] allDesArr = allDes.split(";");
+						for(String des: allDesArr)
+							desListModel.addElement(des);
+//						description.append(allDes);
 					}
 				}
 			});
-			yearList.setBorder(BorderFactory.createTitledBorder("Year:"));
+		yearList.setBorder(BorderFactory.createTitledBorder("Year:"));
+		JScrollPane yearScroll = new JScrollPane(yearList);
+		yearScroll.setPreferredSize(new Dimension(200,300));
 		
-		autoPanel.add(makerList, BorderLayout.WEST);
-		autoPanel.add(modelList, BorderLayout.CENTER);
-		autoPanel.add(yearList, BorderLayout.EAST);
-		this.getContentPane().add(autoPanel);
+		
+		/*Create decription list and set up description list's property*/
+		desListModel = new DefaultListModel<String>();
+		desListModel.addElement("");
+		desList = new JList<String>(desListModel);
+		desList.setVisibleRowCount(5);
+		desList.addListSelectionListener(new ListSelectionListener(){
+
+				@Override
+				public void valueChanged(ListSelectionEvent e) {
+					
+					//getValueIsAdjusting becomes false
+					if(!e.getValueIsAdjusting()){
+						
+						/*Append text to textArea */
+						JList<String> list = (JList<String>)e.getSource();
+						engineType = (String) list.getSelectedValue();
+						try {
+							engineType = Result.getAllDesc(maker, model, year);
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						
+						String[] tempStrArr = engineType.split(" ");
+						rLink = tempStrArr[tempStrArr.length-2];
+						System.out.println("rLink =" + rLink);
+						
+						AutoDescriptionFrame desFrame = new AutoDescriptionFrame(rLink);
+						desFrame.setVisible(true);
+						autoFrame.setVisible(false);
+					}
+				}
+			});
+		desList.setBorder(BorderFactory.createTitledBorder("Description:"));
+		JScrollPane desScroll = new JScrollPane(desList);
+		desScroll.setPreferredSize(new Dimension(400,250));
+		
+		/* Create TextArea for description */
+		JPanel autoDes = new JPanel();
+		JButton backButton = new JButton(" Back ");
+		
+//		description = new JTextArea();
+//		description.setBorder(BorderFactory.createTitledBorder("Auto Description: "));
+//		description.setEditable(false);
+//		description.setPreferredSize(new Dimension(600,250));
+		
+		/* back button function */
+		backButton.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				InitialFrame iniFrame = new InitialFrame();
+				iniFrame.setVisible(true);
+				autoFrame.setVisible(false);
+			}
+			
+		});
+
+		autoDes.add(desScroll);	
+		autoDes.add(backButton);
+		
+		
+		autoSelection.add(makerScroll, BorderLayout.WEST);
+		autoSelection.add(modelScroll, BorderLayout.CENTER);
+		autoSelection.add(yearScroll, BorderLayout.EAST);
+		autoSelection.setBorder(BorderFactory.createEmptyBorder(0, 50, 300, 50));
+		autoDes.setBorder(BorderFactory.createEmptyBorder(0, 50, 0, 50));
+		this.add(autoSelection, BorderLayout.CENTER);
+		this.add(autoDes, BorderLayout.SOUTH);
+		
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		
-
 	}
 	
 }
