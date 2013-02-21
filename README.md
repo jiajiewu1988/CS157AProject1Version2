@@ -1,6 +1,7 @@
 # Fall 12 CS 157 Project - Team 23
 
-[Google Group](https://groups.google.com/forum/?fromgroups#!forum/cs157a_team23)
+[Google Group](https://groups.google.com/forum/?fromgroups#!forum/cs157a_team23)<br />
+[SVN repo](http://code.google.com/p/db-project-23/)
 
 ## How to Retrieve Data from Oralce - by Jerry
 
